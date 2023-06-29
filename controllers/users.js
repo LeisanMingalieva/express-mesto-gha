@@ -32,8 +32,32 @@ const getUser = (req, res) => {
     });
 };
 
+const updateProfil = (req, res) => {
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+};
+
+const updateAvatar = (req, res) => {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
+  updateProfil,
+  updateAvatar,
 };

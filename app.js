@@ -14,6 +14,14 @@ const { PORT = 3000 } = process.env;
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '64998894d20af4e3fbb1c37c',
+  };
+
+  next();
+});
+
 app.use('/users', usersRouter);
 
 app.listen(PORT, () => {
