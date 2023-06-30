@@ -12,7 +12,7 @@ const createCard = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -23,7 +23,7 @@ const getCards = (req, res) => {
       res.send(cards);
     })
     .catch(() => {
-      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -34,14 +34,14 @@ const deleteCard = (req, res) => {
       if (!card) {
         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.send(card);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -60,7 +60,7 @@ const likeCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -79,7 +79,7 @@ const dislikeCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };

@@ -13,7 +13,7 @@ const createUser = (req, res) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -24,7 +24,7 @@ const getUsers = (req, res) => {
       res.send(users);
     })
     .catch(() => {
-      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -42,7 +42,7 @@ const getUser = (req, res) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -57,7 +57,7 @@ const updateProfil = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -72,7 +72,7 @@ const updateAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
