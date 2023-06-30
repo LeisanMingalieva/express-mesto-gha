@@ -1,13 +1,20 @@
 const User = require('../models/user');
+const { NOT_FOUND_ERROR_CODE, INTERNAL_SERVER_ERROR_CODE, BAD_REQUEST_ERROR_CODE } = require('../constants/constants');
 
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => {
-      res.send(user);
+      res.send({
+        name: user.name, about: user.about, _id: user._id, avatar: user.avatar,
+      });
     })
-    .catch((error) => {
-      res.status(400).send(error);
+    .catch((err) => {
+      if (err.name === 'CastError' || err.name === 'Error') {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      } else {
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+      }
     });
 };
 
@@ -16,19 +23,27 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.send(users);
     })
-    .catch((error) => {
-      res.status(400).send(error);
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
     });
 };
 
 const getUser = (req, res) => {
-  const { id } = req.params;
-  User.findById(id)
+  const { userId } = req.params;
+  User.findById(userId)
     .then((user) => {
-      res.send(user);
+      if (!user) {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой пользователь не найден' });
+      } else {
+        res.send(user);
+      }
     })
-    .catch((error) => {
-      res.status(400).send(error);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      } else {
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+      }
     });
 };
 
@@ -38,8 +53,12 @@ const updateProfil = (req, res) => {
     .then((user) => {
       res.send(user);
     })
-    .catch((error) => {
-      res.status(400).send(error);
+    .catch((err) => {
+      if (err.name === 'Error') {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      } else {
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+      }
     });
 };
 
@@ -49,8 +68,12 @@ const updateAvatar = (req, res) => {
     .then((user) => {
       res.send(user);
     })
-    .catch((error) => {
-      res.status(400).send(error);
+    .catch((err) => {
+      if (err.name === 'Error') {
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      } else {
+        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
+      }
     });
 };
 
