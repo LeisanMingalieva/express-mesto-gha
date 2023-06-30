@@ -10,7 +10,7 @@ const app = express();
 
 const usersRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
-const invalidRouter = require('./routes/invalidURL');
+const { NOT_FOUND_ERROR_CODE } = require('./constants/constants');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
@@ -26,7 +26,9 @@ app.use((req, res, next) => {
 
 app.use('/users', usersRouter);
 app.use('/cards', cardRouter);
-app.use('*', invalidRouter);
+app.use('/', (req, res) => {
+  res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой страницы не существует' });
+});
 
 app.listen(PORT, () => {
   console.log('Сервер запущен!');
