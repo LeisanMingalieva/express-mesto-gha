@@ -9,7 +9,7 @@ const createCard = (req, res) => {
       res.send({ name: card.name, link: card.link, _id: card._id });
     })
     .catch((err) => {
-      if (err.name === 'Error') {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
@@ -38,7 +38,7 @@ const deleteCard = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'Error') {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });

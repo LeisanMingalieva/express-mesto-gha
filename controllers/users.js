@@ -10,7 +10,7 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'Error') {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
@@ -54,7 +54,7 @@ const updateProfil = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'Error') {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
@@ -69,7 +69,7 @@ const updateAvatar = (req, res) => {
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'Error') {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка' });
