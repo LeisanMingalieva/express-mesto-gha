@@ -22,7 +22,7 @@ const userShema = new mongoose.Schema({
     },
     required: [true, 'Поле "avatar" должно быть заполнено'],
   },
-});
+}, { versionKey: 'false' });
 
 const User = mongoose.model('user', userShema);
 
