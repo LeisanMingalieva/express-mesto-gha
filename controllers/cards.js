@@ -43,7 +43,7 @@ const deleteCard = (req, res) => {
       if (err.message === 'NotValidId') {
         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -59,7 +59,7 @@ const likeCard = (req, res) => {
       if (err.message === 'NotValidId') {
         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -75,7 +75,7 @@ const dislikeCard = (req, res) => {
       if (err.message === 'NotValidId') {
         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
     });
 };
