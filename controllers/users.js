@@ -38,7 +38,7 @@ const getUser = (req, res) => {
   User.findById(userId)
     .orFail(new Error('NotValidId'))
     .then((user) => {
-      res.send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
       if (err.message === 'NotValidId') {
