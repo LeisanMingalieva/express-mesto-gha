@@ -36,16 +36,13 @@ const getUsers = (req, res) => {
 const getUser = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
+    .orFail(new Error('NotValidId'))
     .then((user) => {
-      if (!user) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой пользователь не найден' });
-      } else {
-        res.send(user);
-      }
+      res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      if (err.message === 'NotValidId') {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такого пользователя нет в базе' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }

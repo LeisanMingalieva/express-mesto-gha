@@ -35,16 +35,13 @@ const getCards = (req, res) => {
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
+    .orFail(new Error('NotValidId'))
     .then((card) => {
-      if (!card) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
-      } else {
-        res.send(card);
-      }
+      res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      if (err.message === 'NotValidId') {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
@@ -54,16 +51,13 @@ const deleteCard = (req, res) => {
 const likeCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
+    .orFail(new Error('NotValidId'))
     .then((card) => {
-      if (!card) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
-      } else {
-        res.send(card);
-      }
+      res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      if (err.message === 'NotValidId') {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
@@ -73,16 +67,13 @@ const likeCard = (req, res) => {
 const dislikeCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
+    .orFail(new Error('NotValidId'))
     .then((card) => {
-      if (!card) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
-      } else {
-        res.send(card);
-      }
+      res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+      if (err.message === 'NotValidId') {
+        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
       } else {
         res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
       }
