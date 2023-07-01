@@ -1,12 +1,17 @@
 const Card = require('../models/card');
-const { NOT_FOUND_ERROR_CODE, INTERNAL_SERVER_ERROR_CODE, BAD_REQUEST_ERROR_CODE } = require('../constants/constants');
+const {
+  NOT_FOUND_ERROR_CODE,
+  INTERNAL_SERVER_ERROR_CODE,
+  BAD_REQUEST_ERROR_CODE,
+  CREATED_CODE,
+} = require('../constants/constants');
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((card) => {
-      res.send({ name: card.name, link: card.link, _id: card._id });
+      res.status(CREATED_CODE).send({ name: card.name, link: card.link, _id: card._id });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

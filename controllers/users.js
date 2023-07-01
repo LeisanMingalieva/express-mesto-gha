@@ -1,11 +1,16 @@
 const User = require('../models/user');
-const { NOT_FOUND_ERROR_CODE, INTERNAL_SERVER_ERROR_CODE, BAD_REQUEST_ERROR_CODE } = require('../constants/constants');
+const {
+  NOT_FOUND_ERROR_CODE,
+  INTERNAL_SERVER_ERROR_CODE,
+  BAD_REQUEST_ERROR_CODE,
+  CREATED_CODE,
+} = require('../constants/constants');
 
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => {
-      res.send({
+      res.status(CREATED_CODE).send({
         name: user.name, about: user.about, _id: user._id, avatar: user.avatar,
       });
     })
