@@ -8,6 +8,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
+const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { NOT_FOUND_ERROR_CODE } = require('./constants/constants');
@@ -29,6 +30,7 @@ app.use('/cards', cardRouter);
 app.use('/', (req, res) => {
   res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой страницы не существует' });
 });
+app.use(helmet());
 
 app.listen(PORT, () => {
   console.log('Сервер запущен!');
