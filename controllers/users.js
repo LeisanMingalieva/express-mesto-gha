@@ -44,7 +44,7 @@ const getUser = (req, res) => {
       if (err.message === 'NotValidId') {
         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такого пользователя нет в базе' });
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Введены некорректные данные' });
       }
     });
 };
