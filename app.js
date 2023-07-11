@@ -11,12 +11,13 @@ const cardRouter = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { NOT_FOUND_ERROR_CODE } = require('./constants/constants');
+const { registerValidation, loginValidation } = require('./middlewares/validation');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(bodyParser.json());
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', loginValidation, login);
+app.post('/signup', registerValidation, createUser);
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardRouter);
 app.use('/', (req, res) => {
