@@ -2,7 +2,6 @@ const router = require('express').Router();
 const { userIdValidation, userInfoValidation, avatarValidation } = require('../middlewares/validation');
 
 const {
-  // createUser,
   getUsers,
   getUser,
   updateProfil,

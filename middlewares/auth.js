@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
-const { BAD_REQUEST_ERROR_CODE } = require('../constants/constants');
+const { UNAUTHORIZE_ERROR_CODE } = require('../constants/constants');
 
 const SECRET_KEY = 'secret-key';
 
-module.exports.auth = (req, res, next) => {
+const auth = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer')) {
-    return res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+    return res.status(UNAUTHORIZE_ERROR_CODE).send({ message: 'Ошибка авторизации' });
   }
   const token = authorization.replace('Bearer', '');
 
@@ -15,9 +15,11 @@ module.exports.auth = (req, res, next) => {
     payload = jwt.verify(token, SECRET_KEY);
   } catch (err) {
     return res
-      .status(BAD_REQUEST_ERROR_CODE)
-      .send({ message: 'Переданы неверные данные' });
+      .status(UNAUTHORIZE_ERROR_CODE)
+      .send({ message: 'Ошибка авторизации' });
   }
   req.user = payload;
   next();
 };
+
+module.exports = auth;
