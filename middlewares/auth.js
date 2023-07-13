@@ -7,15 +7,17 @@ const SECRET_KEY = 'secret-key';
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer')) {
-    return next(new UnauthorizedError('Ошибка авторизации'));
+    next(new UnauthorizedError('Ошибка авторизации'));
+    return;
   }
   const token = authorization.replace('Bearer', '');
 
   let payload;
   try {
-    payload = jwt.verify(token, SECRET_KEY, { expiresIn: '7d' });
+    payload = jwt.verify(token, SECRET_KEY);
   } catch (err) {
-    return next(new NotFoundError('Ошибка авторизации'));
+    next(new NotFoundError('Ошибка авторизации'));
+    return;
   }
   req.user = payload;
   next();

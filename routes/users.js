@@ -9,10 +9,9 @@ const {
   getUserInfo,
 } = require('../controllers/users');
 
-// router.post('/', createUser);
 router.get('/', getUsers);
-router.get('/:userId', userIdValidation, getUser);
 router.get('/me', getUserInfo);
+router.get('/:userId', userIdValidation, getUser);
 router.patch('/me', userInfoValidation, updateProfil);
 router.patch('/me/avatar', avatarValidation, updateAvatar);
 

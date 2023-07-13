@@ -1,17 +1,13 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
-const {
-  NOT_FOUND_ERROR_CODE,
-  INTERNAL_SERVER_ERROR_CODE,
-  BAD_REQUEST_ERROR_CODE,
-  CREATED_CODE,
-  OK_CODE,
-} = require('../constants/constants');
+const { CREATED_CODE, OK_CODE } = require('../constants/constants');
 const UnauthorizedError = require('../helpers/errors/Unauthorized');
 const ConflictError = require('../helpers/errors/ConflictError');
 const BadRequestError = require('../helpers/errors/BadRequestError');
 
 const { getJwtToken } = require('../helpers/jwt');
+
+const NotFoundError = require('../helpers/errors/NotFoundError');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -27,9 +23,7 @@ const login = (req, res, next) => {
       const token = getJwtToken({ _id: baseUser._id });
       res.send({ token });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 const createUser = (req, res, next) => {
@@ -57,8 +51,6 @@ const createUser = (req, res, next) => {
 };
 
 const getUsers = (req, res, next) => {
-  // if (!isAuthorize(req.headers.authorization)) return res.status(401)
-  // .send({ message: 'Необходима авторизация' });
   User.find({})
     .then((users) => {
       res.send(users);
@@ -66,9 +58,7 @@ const getUsers = (req, res, next) => {
     .catch(next);
 };
 
-const getUser = (req, res) => {
-// if (!isAuthorize(req.headers.authorization)) return res.status(401)
-// .send({ message: 'Необходима авторизация' });
+const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .orFail(new Error('NotValidId'))
@@ -77,21 +67,19 @@ const getUser = (req, res) => {
     })
     .catch((err) => {
       if (err.message === 'NotValidId') {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такого пользователя нет в базе' });
+        next(new NotFoundError('Такого пользователя нет в базе'));
       } else {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Введены некорректные данные' });
+        next(new BadRequestError('Введены некорректные данные'));
       }
     });
 };
 
-const getUserInfo = (req, res) => {
-  // if (!isAuthorize(req.headers.authorization)) return res.status(401)
-  // .send({ message: 'Необходима авторизация' });
-  const userId = req.user_id;
+const getUserInfo = (req, res, next) => {
+  const userId = req.user._id;
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой пользователь не найден' });
+        next(new NotFoundError('Такой пользователь не найден'));
       } else {
         res.send({
           _id: user._id,
@@ -102,14 +90,10 @@ const getUserInfo = (req, res) => {
         });
       }
     })
-    .catch(() => {
-      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
-    });
+    .catch(next);
 };
 
 const updateProfil = (req, res, next) => {
-  // if (!isAuthorize(req.headers.authorization)) return res.status(401)
-  // .send({ message: 'Необходима авторизация' });
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
@@ -125,8 +109,6 @@ const updateProfil = (req, res, next) => {
 };
 
 const updateAvatar = (req, res, next) => {
-  // if (!isAuthorize(req.headers.authorization)) return res.status(401)
-  // .send({ message: 'Необходима авторизация' });
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
