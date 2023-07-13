@@ -40,8 +40,10 @@ const createUser = (req, res, next) => {
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     }))
-    .then(() => {
-      res.status(CREATED_CODE).send({ message: `Пользователь ${email} успешно зарегистрирован` });
+    .then((user) => {
+      res.status(CREATED_CODE).send({
+        name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+      });
     })
     .catch((err) => {
       if (err.code === 11000) {
