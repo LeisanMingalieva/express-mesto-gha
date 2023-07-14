@@ -93,7 +93,6 @@ const getUserInfo = (req, res, next) => {
 };
 
 const updateProfil = (req, res, next) => {
-  console.log(req.body);
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user.id._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
