@@ -8,7 +8,7 @@ const {
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
-  const owner = req.user._id;
+  const owner = req.user.id;
   Card.create({ name, link, owner })
     .then((card) => {
       res.status(CREATED_CODE).send({ name: card.name, link: card.link, _id: card._id });

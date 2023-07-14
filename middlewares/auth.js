@@ -6,11 +6,11 @@ const SECRET_KEY = 'secret-key';
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer')) {
+  if (!authorization || !authorization.startsWith('Bearer ')) {
     next(new UnauthorizedError('Ошибка авторизации'));
     return;
   }
-  const token = authorization.replace('Bearer', '');
+  const token = authorization.replace('Bearer ', '');
 
   let payload;
   try {

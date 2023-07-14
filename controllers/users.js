@@ -75,8 +75,8 @@ const getUser = (req, res, next) => {
 };
 
 const getUserInfo = (req, res, next) => {
-  const userId = req.user._id;
-  User.findById(userId)
+  //const { userId } = req.user.id._id;
+  User.findById(req.user.id._id)
     .then((user) => {
       if (!user) {
         next(new NotFoundError('Такой пользователь не найден'));
