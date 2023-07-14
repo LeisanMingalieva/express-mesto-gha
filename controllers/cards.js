@@ -9,6 +9,7 @@ const {
 const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user.id;
+  console.log(owner);
   Card.create({ name, link, owner })
     .then((card) => {
       res.status(CREATED_CODE).send({ name: card.name, link: card.link, _id: card._id });
@@ -50,7 +51,7 @@ const deleteCard = (req, res) => {
 
 const likeCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user._id } }, { new: true })
+  Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user.id._id } }, { new: true })
     .orFail(new Error('NotValidId'))
     .then((card) => {
       res.send(card);
@@ -66,7 +67,7 @@ const likeCard = (req, res) => {
 
 const dislikeCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user._id } }, { new: true })
+  Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user.id._id } }, { new: true })
     .orFail(new Error('NotValidId'))
     .then((card) => {
       res.send(card);
