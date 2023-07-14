@@ -35,21 +35,6 @@ const getCards = (req, res) => {
     });
 };
 
-// const deleteCard = (req, res) => {
-//   const { cardId } = req.params;
-//   Card.findByIdAndRemove(cardId)
-//     .orFail(new Error('NotValidId'))
-//     .then((card) => {
-//       res.send(card);
-//     })
-//     .catch((err) => {
-//       if (err.message === 'NotValidId') {
-//         res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
-//       } else {
-//         res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Ошибка сервера' });
-//       }
-//     });
-// };
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
@@ -64,7 +49,7 @@ const deleteCard = (req, res, next) => {
     .then((removedCard) => res.send(removedCard))
     .catch((err) => {
       if (err.name === 'Cast Error') {
-        next(new BadRequestError('переданы невалидные данные'));
+        next(new BadRequestError('Переданы невалидные данные'));
       } else {
         next(err);
       }

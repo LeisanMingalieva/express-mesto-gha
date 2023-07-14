@@ -1,12 +1,10 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { CREATED_CODE, OK_CODE } = require('../constants/constants');
+const { getJwtToken } = require('../helpers/jwt');
 const UnauthorizedError = require('../helpers/errors/Unauthorized');
 const ConflictError = require('../helpers/errors/ConflictError');
 const BadRequestError = require('../helpers/errors/BadRequestError');
-
-const { getJwtToken } = require('../helpers/jwt');
-
 const NotFoundError = require('../helpers/errors/NotFoundError');
 
 const login = (req, res, next) => {
