@@ -21,7 +21,7 @@ const login = (req, res, next) => {
     .then((matched) => {
       if (!matched) return Promise.reject(new UnauthorizedError('Неправильные почта или пароль'));
       const token = getJwtToken({ _id: baseUser._id });
-      res.send({ token });
+      return res.send({ token });
     })
     .catch(next);
 };
