@@ -26,14 +26,14 @@ const userIdValidation = celebrate({
 
 const userInfoValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30),
   }),
 });
 
 const avatarValidation = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().pattern(REG_EXP),
+    avatar: Joi.string().required().pattern(REG_EXP),
   }),
 });
 

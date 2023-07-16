@@ -40,7 +40,7 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким Email уже существует'));
-      } else if (err.name === 'CastError' || err.name === 'ValidationError') {
+      } else if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы неверные данные'));
       } else {
         next(err);
@@ -59,15 +59,15 @@ const getUsers = (req, res, next) => {
 const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
-    .orFail(new Error('NotValidId'))
+    .orFail(new NotFoundError('Такого пользователя нет в базе'))
     .then((user) => {
       res.status(OK_CODE).send(user);
     })
     .catch((err) => {
       if (err.message === 'NotValidId') {
-        next(new NotFoundError('Такого пользователя нет в базе'));
-      } else {
         next(new BadRequestError('Введены некорректные данные'));
+      } else {
+        next(err);
       }
     });
 };

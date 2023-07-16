@@ -1,15 +1,10 @@
 const Card = require('../models/card');
-const {
-  NOT_FOUND_ERROR_CODE,
-  INTERNAL_SERVER_ERROR_CODE,
-  BAD_REQUEST_ERROR_CODE,
-  CREATED_CODE,
-} = require('../constants/constants');
+const { CREATED_CODE } = require('../constants/constants');
 const NotFoundError = require('../helpers/errors/NotFoundError');
 const ForbiddenError = require('../helpers/errors/ForiddenError');
 const BadRequestError = require('../helpers/errors/BadRequestError');
 
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user.id;
   Card.create({ name, link, owner })
@@ -18,21 +13,19 @@ const createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Переданы неверные данные' });
+        next(new BadRequestError('Переданы невалидные данные'));
       } else {
-        res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        next(err);
       }
     });
 };
 
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
       res.send(cards);
     })
-    .catch(() => {
-      res.status(INTERNAL_SERVER_ERROR_CODE).send({ message: 'Ошибка сервера' });
-    });
+    .catch(next);
 };
 
 const deleteCard = (req, res, next) => {
@@ -48,7 +41,7 @@ const deleteCard = (req, res, next) => {
     })
     .then((removedCard) => res.send(removedCard))
     .catch((err) => {
-      if (err.name === 'Cast Error') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Переданы невалидные данные'));
       } else {
         next(err);
@@ -56,34 +49,34 @@ const deleteCard = (req, res, next) => {
     });
 };
 
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user.id._id } }, { new: true })
-    .orFail(new Error('NotValidId'))
+    .orFail(new NotFoundError('Такой карточки не существует'))
     .then((card) => {
       res.send(card);
     })
     .catch((err) => {
       if (err.message === 'NotValidId') {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
+        next(new BadRequestError('Карточка не найдена'));
       } else {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        next(err);
       }
     });
 };
 
-const dislikeCard = (req, res) => {
+const dislikeCard = (req, res, next) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user.id._id } }, { new: true })
-    .orFail(new Error('NotValidId'))
+    .orFail(new NotFoundError('Такой карточки не существует'))
     .then((card) => {
       res.send(card);
     })
     .catch((err) => {
       if (err.message === 'NotValidId') {
-        res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Такой карточки не существует' });
+        next(new BadRequestError('Карточка не найдена'));
       } else {
-        res.status(BAD_REQUEST_ERROR_CODE).send({ message: 'Ошибка сервера' });
+        next(err);
       }
     });
 };
