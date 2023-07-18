@@ -52,13 +52,13 @@ const deleteCard = (req, res, next) => {
 const likeCard = (req, res, next) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: req.user.id._id } }, { new: true })
-    .orFail(new NotFoundError('Такой карточки не существует'))
+    .orFail(new BadRequestError('Карточка не найдена'))
     .then((card) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.message === 'Такой карточки не существует') {
-        next(new BadRequestError('Карточка не найдена'));
+      if (err.message === 'Карточка не найдена') {
+        next(new NotFoundError('Такой карточки не существует'));
       } else {
         next(err);
       }
@@ -68,13 +68,13 @@ const likeCard = (req, res, next) => {
 const dislikeCard = (req, res, next) => {
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: req.user.id._id } }, { new: true })
-    .orFail(new NotFoundError('Такой карточки не существует'))
+    .orFail(new BadRequestError('Карточка не найдена'))
     .then((card) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.message === 'Такой карточки не существует') {
-        next(new BadRequestError('Карточка не найдена'));
+      if (err.message === 'Карточка не найдена') {
+        next(new NotFoundError('Такой карточки не существует'));
       } else {
         next(err);
       }

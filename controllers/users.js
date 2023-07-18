@@ -59,13 +59,13 @@ const getUsers = (req, res, next) => {
 const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
-    .orFail(new NotFoundError('Такого пользователя нет в базе'))
+    .orFail(new BadRequestError('Введены некорректные данные'))
     .then((user) => {
       res.status(OK_CODE).send(user);
     })
     .catch((err) => {
-      if (err.message === 'Такого пользователя нет в базе') {
-        next(new BadRequestError('Введены некорректные данные'));
+      if (err.message === 'Введены некорректные данные') {
+        next(new NotFoundError('Такого пользователя нет в базе'));
       } else {
         next(err);
       }
