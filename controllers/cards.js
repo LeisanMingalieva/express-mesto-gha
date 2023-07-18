@@ -57,7 +57,7 @@ const likeCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.message === 'NotValidId') {
+      if (err.message === 'Такой карточки не существует') {
         next(new BadRequestError('Карточка не найдена'));
       } else {
         next(err);
@@ -73,7 +73,7 @@ const dislikeCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      if (err.message === 'NotValidId') {
+      if (err.message === 'Такой карточки не существует') {
         next(new BadRequestError('Карточка не найдена'));
       } else {
         next(err);

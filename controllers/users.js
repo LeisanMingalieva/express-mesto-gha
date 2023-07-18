@@ -64,7 +64,7 @@ const getUser = (req, res, next) => {
       res.status(OK_CODE).send(user);
     })
     .catch((err) => {
-      if (err.message === 'NotValidId') {
+      if (err.message === 'Такого пользователя нет в базе') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
