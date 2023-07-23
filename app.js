@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const { error } = require('./middlewares/error');
 const router = require('./routes/index');
@@ -15,6 +16,7 @@ app.listen(PORT, () => {
 });
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use(router);
